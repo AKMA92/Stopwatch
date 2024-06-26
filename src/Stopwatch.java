@@ -5,16 +5,25 @@ import javax.swing.JTextField;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Stopwatch {
 
 	private JFrame frame;
-	private JTextField secondMinCounter;
-	private JTextField firstMinCounter;
+	private JTextField secondMinCounterText;
+	private JTextField firstMinCounterText;
 	private JTextField pointText;
-	private JTextField secondSekCounter;
-	private JTextField firstSekCounter;
-
+	private JTextField secondSekCounterText;
+	private JTextField firstSekCounterText;
+	private int secondMinCounterInt;
+	private int firstMinCounterInt ;
+	private int secondSekCounterInt;
+	private int firstSekCounterInt;
+	private boolean isOn;
+	private JButton resetButton;
+	private JButton startButton;
+	private JButton stopButton;
 	/**
 	 * Launch the application.
 	 */
@@ -23,7 +32,7 @@ public class Stopwatch {
 			public void run() {
 				try {
 					Stopwatch window = new Stopwatch();
-					window.frame.setVisible(true);
+			 		window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -36,8 +45,36 @@ public class Stopwatch {
 	 */
 	public Stopwatch() {
 		initialize();
+		firstSekCounterInt = 0;
+		secondSekCounterInt = 0;
+		firstMinCounterInt = 0;
+		secondMinCounterInt = 0;
+		isOn = false;
 	}
 
+	
+	private void start() {
+	    isOn = true;
+	    Thread thread = new Thread(new Runnable() {
+	        public void run() {
+	            int i = 0;
+	            while (isOn) {
+	                System.out.println(i); // Diese Zeile simuliert das Aktualisieren der UI.
+	                i++;
+	                try {
+	                	Thread.sleep(1000);
+	                } catch (InterruptedException e) {
+	                    Thread.currentThread().interrupt(); 
+	                }
+	            }
+	        }
+	    });
+	    thread.start(); // Startet den Thread.
+	}
+
+	
+	
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -47,17 +84,17 @@ public class Stopwatch {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		secondMinCounter = new JTextField();
-		secondMinCounter.setEditable(false);
-		secondMinCounter.setBounds(81, 60, 36, 80);
-		frame.getContentPane().add(secondMinCounter);
-		secondMinCounter.setColumns(10);
+		secondMinCounterText = new JTextField();
+		secondMinCounterText.setEditable(false);
+		secondMinCounterText.setBounds(81, 60, 36, 80);
+		frame.getContentPane().add(secondMinCounterText);
+		secondMinCounterText.setColumns(10);
 		
-		firstMinCounter = new JTextField();
-		firstMinCounter.setEditable(false);
-		firstMinCounter.setColumns(10);
-		firstMinCounter.setBounds(127, 60, 36, 80);
-		frame.getContentPane().add(firstMinCounter);
+		firstMinCounterText = new JTextField();
+		firstMinCounterText.setEditable(false);
+		firstMinCounterText.setColumns(10);
+		firstMinCounterText.setBounds(127, 60, 36, 80);
+		frame.getContentPane().add(firstMinCounterText);
 		
 		pointText = new JTextField();
 		pointText.setEditable(false);
@@ -67,24 +104,42 @@ public class Stopwatch {
 		pointText.setBounds(192, 60, 36, 80);
 		frame.getContentPane().add(pointText);
 		
-		secondSekCounter = new JTextField();
-		secondSekCounter.setEditable(false);
-		secondSekCounter.setColumns(10);
-		secondSekCounter.setBounds(253, 60, 36, 80);
-		frame.getContentPane().add(secondSekCounter);
+		secondSekCounterText = new JTextField();
+		secondSekCounterText.setEditable(false);
+		secondSekCounterText.setColumns(10);
+		secondSekCounterText.setBounds(253, 60, 36, 80);
+		frame.getContentPane().add(secondSekCounterText);
 		
-		firstSekCounter = new JTextField();
-		firstSekCounter.setEditable(false);
-		firstSekCounter.setColumns(10);
-		firstSekCounter.setBounds(304, 60, 36, 80);
-		frame.getContentPane().add(firstSekCounter);
+		firstSekCounterText = new JTextField();
+		firstSekCounterText.setEditable(false);
+		firstSekCounterText.setColumns(10);
+		firstSekCounterText.setBounds(304, 60, 36, 80);
+		frame.getContentPane().add(firstSekCounterText);
 		
-		JButton btnNewButton = new JButton("Start");
-		btnNewButton.setBounds(74, 182, 89, 23);
-		frame.getContentPane().add(btnNewButton);
+		startButton = new JButton("Start");
+		startButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				start();
+			}
+		});
+		startButton.setBounds(74, 182, 89, 23);
+		frame.getContentPane().add(startButton);
 		
-		JButton btnNewButton_1 = new JButton("Stop");
-		btnNewButton_1.setBounds(251, 182, 89, 23);
-		frame.getContentPane().add(btnNewButton_1);
+		stopButton = new JButton("Stop");
+		stopButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				isOn = false;
+			}
+		});
+		stopButton.setBounds(251, 182, 89, 23);
+		frame.getContentPane().add(stopButton);
+		
+		resetButton = new JButton("Reset");
+		resetButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		resetButton.setBounds(165, 216, 89, 23);
+		frame.getContentPane().add(resetButton);
 	}
 }
