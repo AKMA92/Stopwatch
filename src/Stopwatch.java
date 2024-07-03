@@ -50,19 +50,49 @@ public class Stopwatch {
 		firstMinCounterInt = 0;
 		secondMinCounterInt = 0;
 		isOn = false;
+		setTextNull();
 	}
+	
+	
+	
+	private void setTextNull() {
+		firstSekCounterText.setText(String.valueOf(firstSekCounterInt));
+		secondSekCounterText.setText(String.valueOf(secondSekCounterInt));
+		firstMinCounterText.setText(String.valueOf(firstMinCounterInt));
+		secondMinCounterText.setText(String.valueOf(secondMinCounterInt));
 
+
+
+	}
 	
 	private void start() {
 	    isOn = true;
 	    Thread thread = new Thread(new Runnable() {
 	        public void run() {
-	            int i = 0;
 	            while (isOn) {
-	                System.out.println(i); // Diese Zeile simuliert das Aktualisieren der UI.
-	                i++;
+	            	if (firstSekCounterInt < 9) {
+		               firstSekCounterInt++;
+		               firstSekCounterText.setText(String.valueOf(firstSekCounterInt)); // Diese Zeile simuliert das Aktualisieren der GUI.
+
+	                } else if( secondSekCounterInt == 5 && firstSekCounterInt == 9){
+	                	firstSekCounterInt = 0;
+	                	firstSekCounterText.setText(String.valueOf(firstSekCounterInt));
+	                	secondSekCounterInt = 0;
+	                	secondSekCounterText.setText(String.valueOf(secondSekCounterInt));
+	                	firstMinCounterInt++;
+	                	firstMinCounterText.setText(String.valueOf(firstMinCounterInt));
+	                	
+	                }
+	            	
+	                else if (firstSekCounterInt >= 9) {
+	                	firstSekCounterInt = 0;
+	                	firstSekCounterText.setText(String.valueOf(firstSekCounterInt));
+	                	secondSekCounterInt++;
+	                	secondSekCounterText.setText(String.valueOf(secondSekCounterInt));
+
+	                }
 	                try {
-	                	Thread.sleep(1000);
+	                	Thread.sleep(100);
 	                } catch (InterruptedException e) {
 	                    Thread.currentThread().interrupt(); 
 	                }
@@ -73,6 +103,20 @@ public class Stopwatch {
 	}
 
 	
+	private void stop() {
+		isOn = false;
+	}
+	private void reset() {
+		stop();
+		firstSekCounterInt = 0;
+        firstSekCounterText.setText(String.valueOf(firstSekCounterInt)); // Diese Zeile simuliert das Aktualisieren der GUI.
+
+		secondSekCounterInt = 0;
+    	secondSekCounterText.setText(String.valueOf(secondSekCounterInt));
+
+		firstMinCounterInt = 0;
+		secondMinCounterInt = 0;
+	}
 	
 	
 	/**
@@ -85,12 +129,14 @@ public class Stopwatch {
 		frame.getContentPane().setLayout(null);
 		
 		secondMinCounterText = new JTextField();
+		secondMinCounterText.setFont(new Font("Tahoma", Font.PLAIN, 50));
 		secondMinCounterText.setEditable(false);
 		secondMinCounterText.setBounds(81, 60, 36, 80);
 		frame.getContentPane().add(secondMinCounterText);
 		secondMinCounterText.setColumns(10);
 		
 		firstMinCounterText = new JTextField();
+		firstMinCounterText.setFont(new Font("Tahoma", Font.PLAIN, 50));
 		firstMinCounterText.setEditable(false);
 		firstMinCounterText.setColumns(10);
 		firstMinCounterText.setBounds(127, 60, 36, 80);
@@ -105,12 +151,14 @@ public class Stopwatch {
 		frame.getContentPane().add(pointText);
 		
 		secondSekCounterText = new JTextField();
+		secondSekCounterText.setFont(new Font("Tahoma", Font.PLAIN, 50));
 		secondSekCounterText.setEditable(false);
 		secondSekCounterText.setColumns(10);
 		secondSekCounterText.setBounds(253, 60, 36, 80);
 		frame.getContentPane().add(secondSekCounterText);
 		
 		firstSekCounterText = new JTextField();
+		firstSekCounterText.setFont(new Font("Tahoma", Font.PLAIN, 50));
 		firstSekCounterText.setEditable(false);
 		firstSekCounterText.setColumns(10);
 		firstSekCounterText.setBounds(304, 60, 36, 80);
@@ -137,6 +185,7 @@ public class Stopwatch {
 		resetButton = new JButton("Reset");
 		resetButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				reset();
 			}
 		});
 		resetButton.setBounds(165, 216, 89, 23);
